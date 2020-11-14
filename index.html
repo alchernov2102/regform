@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <title> Реєстрація випускників</title>
+    <script defer>
+        $(document).ready(function() {
+            $(`form`).submit(function(event) {
+                event.preventDefault();
+                let name = $("#name").val();
+                let surname = $("#surname").val();
+                let lastname = $("#lastname").val();
+                let email = $("#email").val();
+                let birthday = $("#birthday").val();
+                let year = $("#year").val();
+                let submit = $("#submit").val();
+
+                $.post('mail.php ', {
+
+                        name,
+                        surname,
+                        lastname,
+                        email,
+                        birthday,
+                        year
+
+
+                    },
+                    function(response) {
+
+                        const result = JSON.parse(response)
+                        if (result.error) {
+                            $("#formMessage").removeClass();
+                            $("#formMessage").html(result.errorMsg).addClass("errorMsg");
+                        } else {
+                            $("#formMessage").removeClass();
+                            $("#formMessage").html(result.succesMsg).addClass("succesMsg");
+                        }
+
+                    });
+
+            });
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="formMessage">
+
+    </div>
+
+    <div class="main-heading">
+        <h1>Реєстрація випускників</h1>
+    </div>
+    <div class="reg-form">
+        <form id="form" name="form" method="POST" action="mail.php">
+            <label>Ім'я</label><br>
+            <input id="name" type="text" name="name"><br>
+
+            <label>Прізвище</label><br>
+            <input id="surname" type="text" name="surname"><br>
+
+            <label>По-батькові</label><br>
+            <input id="lastname" type="text" name="lastname"><br>
+
+            <label>Електронна адреса</label><br>
+            <input id="email" type="email"><br>
+
+            <label>Дата народження</label><br>
+            <!--Враховуємо, що наш випускник не може вводити нереальні значення, тому обмежуємо їх до 1920-2000 -->
+            <input id="birthday" type="date" min="1920-01-01" max="2000-01-01" title="Допустимі значення: 1920 - 2000"><br>
+
+            <label>Рік випуску</label><br>
+            <!-- Вводимо також обмеження і для року випуску-->
+            <input id="year" maxlength="4" type="number" min="1940" max="2020" title="Максимальний рік: 2020, мінімальний: 1940"><br>
+            <label>Оберіть ваш Факультет</label><br>
+
+            <select id="faculty">
+            <option>ФТІ</option>
+            <option>ФПМ</option>
+            <option>РТФ</option>
+            <option>ФММ</option>
+        </select>
+
+            <br>
+
+
+            <button type="submit" value="Submit">Зареєструватися</button>
+
+    </div>
+
+    </form>
+
+
+
+
+</body>
